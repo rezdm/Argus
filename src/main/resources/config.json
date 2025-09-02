@@ -21,6 +21,40 @@
           "reset": 2,
           "interval": 20,
           "history": 3600
+        },
+        {
+          "sort": 10,
+          "name": "NAS-a",
+          "test": {
+            "method": "Ping",
+            "host": "r2d2"
+          },
+          "timeout": 1000,
+          "warning": 4,
+          "failure": 8,
+          "reset": 2,
+          "interval": 20,
+          "history": 3600
+        }
+      ]
+    },
+    {
+      "group": "External",
+      "sort": 10,
+      "destinations": [
+        {
+          "sort": 0,
+          "name": "Google DNS",
+          "test": {
+            "method": "Ping",
+            "host": "8.8.8.8"
+          },
+          "timeout": 1000,
+          "warning": 4,
+          "failure": 8,
+          "reset": 2,
+          "interval": 20,
+          "history": 3600
         }
       ]
     }
