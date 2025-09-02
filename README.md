@@ -15,3 +15,7 @@ The tool allows to
 - HTTP-get URL
 
 # Screenshot
+![alt text](argus-screenshot.png)
+
+# Name
+Argus Panoptes is an all-seing, watchman creature from Greek mythology
