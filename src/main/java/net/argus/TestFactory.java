@@ -14,7 +14,7 @@ public class TestFactory {
     static {
         testImplementations.put(TestMethod.Ping, new NetworkTestPing());
         testImplementations.put(TestMethod.Connect, new NetworkTestConnect());
-        testImplementations.put(TestMethod.Url, new NetworkTestUrl());
+        testImplementations.put(TestMethod.URL, new NetworkTestUrl());
     }
 
     public static NetworkTest getTest(TestMethod testMethod) {
