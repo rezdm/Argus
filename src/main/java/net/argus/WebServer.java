@@ -94,12 +94,24 @@ class WebServer {
             """.formatted(config.name(), config.name()));
 
             // Group monitors by group name
-            Map<String, List<MonitorState>> groupedMonitors = new TreeMap<>();
+            Map<Group, List<MonitorState>> groupedMonitors = new HashMap<>();
             for (var state : monitors.values()) {
-                groupedMonitors.computeIfAbsent(state.groupName, k -> new ArrayList<>()).add(state);
+                groupedMonitors.computeIfAbsent(state.group, k -> new ArrayList<>()).add(state);
             }
 
-            for (var groupEntry : groupedMonitors.entrySet()) {
+            List<Map.Entry<Group, List<MonitorState>>> sortedGroups = groupedMonitors.entrySet()
+                    .stream()
+                    .sorted((e1, e2) -> {
+                        int sortCompare = Integer.compare(e1.getKey().sort(), e2.getKey().sort());
+                        return sortCompare != 0 ? sortCompare : e1.getKey().group().compareTo(e2.getKey().group());
+                    })
+                    .toList();
+
+            for (var groupEntry : sortedGroups) {
+                final var group = groupEntry.getKey();
+                final var states = groupEntry.getValue();
+                states.sort(Comparator.comparing(s -> s.destination.sort()));
+
                 html.append("""
                 <div class="group">
                     <div class="group-header">%s</div>
@@ -116,13 +128,10 @@ class WebServer {
                             </tr>
                         </thead>
                         <tbody>
-                """.formatted(groupEntry.getKey()));
+                """.formatted(group.group()));
 
                 // Sort by destination sort order
-                final var sortedStates = groupEntry.getValue();
-                sortedStates.sort(Comparator.comparing(s -> s.destination.sort()));
-
-                for (var state : sortedStates) {
+                for (var state : states) {
                     final var statusClass = switch (state.getCurrentStatus()) {
                         case OK -> "status-ok";
                         case WARNING -> "status-warning";

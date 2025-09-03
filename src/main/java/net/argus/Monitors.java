@@ -27,7 +27,7 @@ class Monitors {
             for (var dest : group.destinations()) {
                 try {
                     final var key = group.group() + ":" + dest.name();
-                    final var state = new MonitorState(dest, group.group());
+                    final var state = new MonitorState(dest, group);
                     monitors.put(key, state);
                     totalMonitors++;
                     logger.debug("Initialized monitor: {} ({})", dest.name(), state.getTestDescription());

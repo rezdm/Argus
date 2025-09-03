@@ -14,7 +14,7 @@ enum MonitorStatus {
 
 class MonitorState {
     final Destination destination;
-    final String groupName;
+    final Group group;
     private final Deque<TestResult> history = new ConcurrentLinkedDeque<>();
     private int consecutiveFailures = 0;
     private int consecutiveSuccesses = 0;
@@ -23,9 +23,9 @@ class MonitorState {
     private final NetworkTest testImplementation;
     private final String testDescription;
 
-    public MonitorState(Destination destination, String groupName) {
+    public MonitorState(Destination destination, Group group) {
         this.destination = destination;
-        this.groupName = groupName;
+        this.group = group;
         final var testConfigWithHost = new TestConfig(
               destination.test().testMethod()
             , destination.test().protocol()
@@ -37,6 +37,10 @@ class MonitorState {
 
         this.testImplementation = TestFactory.getTest(testConfigWithHost.testMethod());
         this.testDescription = TestFactory.validateAndDescribe(testConfigWithHost);
+    }
+
+    public String getGroupName() {
+        return group.group();
     }
 
     public synchronized void addResult(TestResult result) {
