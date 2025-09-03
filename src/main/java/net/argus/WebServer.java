@@ -99,13 +99,10 @@ class WebServer {
                 groupedMonitors.computeIfAbsent(state.group, k -> new ArrayList<>()).add(state);
             }
 
-            List<Map.Entry<Group, List<MonitorState>>> sortedGroups = groupedMonitors.entrySet()
-                    .stream()
-                    .sorted((e1, e2) -> {
-                        int sortCompare = Integer.compare(e1.getKey().sort(), e2.getKey().sort());
-                        return sortCompare != 0 ? sortCompare : e1.getKey().group().compareTo(e2.getKey().group());
-                    })
-                    .toList();
+            final var sortedGroups = groupedMonitors.entrySet()
+                .stream()
+                .sorted(Comparator.comparingInt((Map.Entry<Group, List<MonitorState>> e) -> e.getKey().sort()).thenComparing(e -> e.getKey().group()))
+            .toList();
 
             for (var groupEntry : sortedGroups) {
                 final var group = groupEntry.getKey();
